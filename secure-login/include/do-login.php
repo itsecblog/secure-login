@@ -11,12 +11,12 @@ if ((isset($_POST['username'])) && (isset($_POST['password'])))
 	{
 		echo "Login fehlgeschlagen, Sie werden weitergeleitet..!";
 		session_destroy();
-		echo '<meta http-equiv="refresh" content="2; url=./login.html">';
+		echo '<meta http-equiv="refresh" content="2; url=../login.php">';
 		exit;
 
 	}
 
-	$dbconnect = new mysqli('host', 'username', 'password', 'database');
+	require("../config.php");
 
 	$stmt = $dbconnect->prepare("SELECT id FROM user WHERE username=? AND password=?");
 	$stmt->bind_param("ss", $_POST['username'], $_POST['password']);
@@ -29,7 +29,7 @@ if ((isset($_POST['username'])) && (isset($_POST['password'])))
 
 		echo "Login erfolgreich,  Sie werden weitergeleitet...!";
 		$_SESSION['username'] = $_POST['username'];
-		echo '<meta http-equiv="refresh" content="2; url=./index.php">';
+		echo '<meta http-equiv="refresh" content="2; url=../../index.php">';
 
 	}
 	else
@@ -37,7 +37,7 @@ if ((isset($_POST['username'])) && (isset($_POST['password'])))
 
 		echo "Login fehlgeschlagen, Sie werden weitergeleitet...!";
 		session_destroy();
-		echo '<meta http-equiv="refresh" content="2; url=./login.html">';
+		echo '<meta http-equiv="refresh" content="2; url=../login.php">';
 
 	}
 
@@ -46,7 +46,7 @@ else
 {
 	echo "Login fehlgeschlagen, Sie werden weitergeleitet...!";
 	session_destroy();
-	echo '<meta http-equiv="refresh" content="2; url=./login.html">';
+	echo '<meta http-equiv="refresh" content="2; url=../login.php">';
 }
 
 ?>

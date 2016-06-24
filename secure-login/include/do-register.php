@@ -4,7 +4,7 @@ if(isset($_POST['username']) && isset($_POST['password']))
 { 
 	/* An dieser Stelle Gültigkeit der übergebenen Strings prüfen */ 
 
-	$dbconnect = new mysqli('host', 'username', 'password', 'database');
+	require("../config.php");
 
 	$stmt = $dbconnect->prepare("SELECT id FROM user WHERE username=?");
 	$stmt->bind_param("s", $_POST['username']);
@@ -17,7 +17,7 @@ if(isset($_POST['username']) && isset($_POST['password']))
 
 		echo "User konnte nicht angelegt werden, Sie werden weitergeleitet...";
 
-		echo '<meta http-equiv="refresh" content="2; url=./register.html">';
+		echo '<meta http-equiv="refresh" content="2; url=../register.php">';
 
 	}
 	else
@@ -30,14 +30,14 @@ if(isset($_POST['username']) && isset($_POST['password']))
 
 			echo "User erfolgreich angelegt, Sie werden weitergeleitet...";
 	
-			echo '<meta http-equiv="refresh" content="2; url=./login.html">';
+			echo '<meta http-equiv="refresh" content="2; url=../login.php">';
 		}
 		else
 		{
 
 			echo "User konnte nicht angelegt werden, Sie werden weitergeleitet...";
 
-			echo '<meta http-equiv="refresh" content="2; url=./register.html">';
+			echo '<meta http-equiv="refresh" content="2; url=../register.php">';
 
 		}
 

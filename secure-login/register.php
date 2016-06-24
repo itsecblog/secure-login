@@ -4,8 +4,9 @@
  
 <head>
  
-    <script src="bCrypt.js" type="text/javascript"></script>
+    <script src="./include/bCrypt.js" type="text/javascript"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="./include/style.css"> 
  
     <script type="text/javascript">
  
@@ -16,10 +17,15 @@
  
     function crypt()
     {
+
+	document.getElementById("pwdForm").style.display="none";
+	document.getElementById("wait").style.display="block";
  
         if($("#password").val().length < 10)
         {
-                alert('Password zu kurz, Mindestens 10 Zeichen');
+                alert('Password may not be shorter than 10 chars.');
+		document.getElementById("pwdForm").style.display="block";
+		document.getElementById("wait").style.display="none";
                 return;
         }
      
@@ -33,6 +39,8 @@
         catch(err) 
         {
                 alert(err);
+		document.getElementById("pwdForm").style.display="block";
+		document.getElementById("wait").style.display="none";
                 return;
         }
      
@@ -43,6 +51,8 @@
         catch(err) 
         {
                 alert(err);
+		document.getElementById("pwdForm").style.display="block";
+		document.getElementById("wait").style.display="none";
                 return;
         }
  
@@ -53,16 +63,18 @@
 </head>
 <body>
 
-	<h1>Neuen Account erstellen</h1>
-	<br />	
- 
-    	<form id='pwdForm' action='./create-account.php' method='post'>
+    	<form id='pwdForm' action='./include/do-register.php' method='post'>
+		<center><h2>Create Account</h2></center><br />
         	<label for="username">Username: </label><input size=30 type="text" name="username" id="username"></input>
         	<br />
         	<label for="password">Password: </label><input size=30 type="password" name="password" id="password"></input>
 		<br />	<br />	
-        	<INPUT TYPE="button" value="Submit" onClick="crypt()"/>
+        	<INPUT TYPE="button" class="button" value="Register" onClick="crypt()"/>
     	</form>
  
+	<form style="display: none" id='wait'>
+		<br /><br /><center>Please wait...</center><br />
+	</form>
+
 </body>
 </html>

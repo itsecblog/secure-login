@@ -4,7 +4,7 @@ if (isset($_POST['username']))
 { 
 	/* An dieser Stelle Gültigkeit der übergebenen Strings prüfen */ 
 
-	$dbconnect = new mysqli('host', 'username', 'password', 'database');
+	require("../config.php");
 
 	$stmt = $dbconnect->prepare("DELETE FROM tmp_salts WHERE timestamp < (NOW() - INTERVAL 1 DAY)");
 	$stmt->execute();

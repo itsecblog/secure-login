@@ -4,8 +4,9 @@
 
 <head>
 
-	<script src="bCrypt.js" type="text/javascript"></script>
+	<script src="./include/bCrypt.js" type="text/javascript"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js" type="text/javascript"></script>
+	<link rel="stylesheet" href="./include/style.css"> 
 
 	<script type="text/javascript">
 
@@ -16,15 +17,18 @@
 	  	$("#pwdForm").submit();
 	}
 
-	function getSalt()
+	function prepareLogin()
 	{
 
 		$salt = "";
 
+		document.getElementById("pwdForm").style.display="none";
+		document.getElementById("wait").style.display="block";
+
 		ajax = new XMLHttpRequest();
     		if(ajax!=null)
 		{
-			ajax.open("POST","./salt.php",true);
+			ajax.open("POST","./include/get-salt.php",true);
 			ajax.onreadystatechange = function()
 			{
 				if(this.readyState == 4)
@@ -49,14 +53,14 @@
 		}
     		else
 		{
-			alert("Ihr Browser unterstützt kein Ajax!");
+			alert("Your browser does not support Ajax.");
+			document.getElementById("pwdForm").style.display="block";
+			document.getElementById("wait").style.display="none";
     		}
 	}
 
 	function login()
 	{
-	
-		// Weitere Checks ausführen
 	
 		try
 		{
@@ -65,6 +69,8 @@
 		catch(err) 
 		{
 	    		alert(err);
+			document.getElementById("pwdForm").style.display="block";
+			document.getElementById("wait").style.display="none";
 	    		return;
 		}
 
@@ -75,20 +81,19 @@
 </head>
 <body>
 	
-	<h1>Login</h1>
-	<br />	
-
-	<form id='pwdForm' action='./do-login.php' method='post'>
+	<form id='pwdForm' action='./include/do-login.php' method='post'>
+		<center><h2>Please Login</h2></center><br />
 		<label for="username">Username: </label><input size=30 type="text" name="username" id="username"></input>
 		<br />
 		<label for="password">Password: </label><input size=30 type="password" name="password" id="password"></input>
 		<br />	<br />		
-		<INPUT TYPE="button" value="Login" onClick="getSalt()"/>
+		<INPUT TYPE="button" id="button" class="button" value="Login" onClick="prepareLogin()"/><br />
+		<center><a href="./register.php">Create Account</a></center>
 	</form>
 
-	<br />	
-	<br />	
-<a href="./register.html">Registrieren</a>
+	<form style="display: none" id='wait'>
+		<br /><br /><center>Please wait...</center><br />
+	</form>
 
 
 </body>
