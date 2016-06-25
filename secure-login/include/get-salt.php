@@ -9,7 +9,7 @@ if (isset($_POST['username']))
 	$stmt = $dbconnect->prepare("DELETE FROM tmp_salts WHERE timestamp < (NOW() - INTERVAL 1 DAY)");
 	$stmt->execute();
 
-	$stmt = $dbconnect->prepare("SELECT password FROM user WHERE username=?");
+	$stmt = $dbconnect->prepare("SELECT salt FROM user WHERE username=?");
 	$stmt->bind_param("s", $_POST['username']);
 	$stmt->execute();
 
@@ -19,7 +19,7 @@ if (isset($_POST['username']))
 	{ 
 
 		$row = mysqli_fetch_assoc($result);
-		echo substr($row['password'], 0, 29);
+		echo "$2a$13$" . $row['salt'];
 	}
 	else
 	{
@@ -42,7 +42,7 @@ if (isset($_POST['username']))
   				'cost' => 13,
 			];
 			$base = password_hash ('', PASSWORD_BCRYPT, $options);
-    			$salt = "$2a$13$" . substr($base, 8, 30);
+    			$salt = "$2a$13$" . substr($base, 7, 28);
 
 			$stmt = $dbconnect->prepare("INSERT INTO tmp_salts (username, salt) VALUES (?, ?)");
 			$stmt->bind_param("ss", $_POST['username'], $salt);

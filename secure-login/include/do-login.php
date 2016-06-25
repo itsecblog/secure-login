@@ -1,15 +1,15 @@
 <?php
 
+session_start();
+
 if ((isset($_POST['username'])) && (isset($_POST['password'])))
 { 
 
-	session_start();
-
 	/* An dieser Stelle Gültigkeit der übergebenen Strings prüfen */ 
 
-	if (trim($_POST['username']) == '') 
+	if ((trim($_POST['username']) == '') || (trim($_POST['password']) == '')) 
 	{
-		echo "Login fehlgeschlagen, Sie werden weitergeleitet..!";
+		echo "Authentication failed, redirecting...";
 		session_destroy();
 		echo '<meta http-equiv="refresh" content="2; url=../login.php">';
 		exit;
@@ -18,24 +18,38 @@ if ((isset($_POST['username'])) && (isset($_POST['password'])))
 
 	require("../config.php");
 
-	$stmt = $dbconnect->prepare("SELECT id FROM user WHERE username=? AND password=?");
-	$stmt->bind_param("ss", $_POST['username'], $_POST['password']);
+	$stmt = $dbconnect->prepare("SELECT id, password FROM user WHERE username=?");
+	$stmt->bind_param("s", $_POST['username']);
 	$stmt->execute();
 
 	$result = $stmt->get_result();
 
-	if ($result->num_rows == 1) 
+	if ($result->num_rows == 1)
 	{ 
 
-		echo "Login erfolgreich,  Sie werden weitergeleitet...!";
-		$_SESSION['username'] = $_POST['username'];
-		echo '<meta http-equiv="refresh" content="2; url=../../index.php">';
+		$row = mysqli_fetch_assoc($result);
+
+		if (password_verify($_POST['password'], $row['password']))
+		{
+			echo "Authentication successfully, redirecting...";
+			$_SESSION['username'] = $_POST['username'];
+			echo '<meta http-equiv="refresh" content="2; url=../../index.php">';	
+		}
+		else
+		{
+
+			echo "Authentication failed, redirecting...";
+			session_destroy();
+			echo '<meta http-equiv="refresh" content="2; url=../login.php">';
+
+		}
+
 
 	}
 	else
 	{
 
-		echo "Login fehlgeschlagen, Sie werden weitergeleitet...!";
+		echo "Authentication failed, redirecting...";
 		session_destroy();
 		echo '<meta http-equiv="refresh" content="2; url=../login.php">';
 
@@ -44,7 +58,7 @@ if ((isset($_POST['username'])) && (isset($_POST['password'])))
 }
 else
 {
-	echo "Login fehlgeschlagen, Sie werden weitergeleitet...!";
+	echo "Authentication failed, redirecting...";
 	session_destroy();
 	echo '<meta http-equiv="refresh" content="2; url=../login.php">';
 }

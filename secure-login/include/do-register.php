@@ -15,27 +15,35 @@ if(isset($_POST['username']) && isset($_POST['password']))
 	if ($result->num_rows > 0) 
 	{ 
 
-		echo "User konnte nicht angelegt werden, Sie werden weitergeleitet...";
+		echo "Could not create user, redirecting...";
 
 		echo '<meta http-equiv="refresh" content="2; url=../register.php">';
 
 	}
 	else
 	{
-		if (trim($_POST['username']) != '') 
+		if ((trim($_POST['username']) != '') && (trim($_POST['password']) != ''))
 		{
-			$stmt = $dbconnect->prepare("INSERT INTO user (username, password) VALUES (?, ?)");
-			$stmt->bind_param("ss", $_POST['username'], $_POST['password']);
+
+			$salt = substr($_POST['password'], 7, 28); 
+
+			$options = [
+    				'cost' => 13,
+			];
+ 			$hash = password_hash($_POST['password'], PASSWORD_BCRYPT, $options);
+
+			$stmt = $dbconnect->prepare("INSERT INTO user (username, password, salt) VALUES (?, ?, ?)");
+			$stmt->bind_param("sss", $_POST['username'], $hash, $salt);
 			$stmt->execute();
 
-			echo "User erfolgreich angelegt, Sie werden weitergeleitet...";
+			echo "Sucessfully created user, redirecting...";
 	
 			echo '<meta http-equiv="refresh" content="2; url=../login.php">';
 		}
 		else
 		{
 
-			echo "User konnte nicht angelegt werden, Sie werden weitergeleitet...";
+			echo "Could not create user, redirecting...";
 
 			echo '<meta http-equiv="refresh" content="2; url=../register.php">';
 
