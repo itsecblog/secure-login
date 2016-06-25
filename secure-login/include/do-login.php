@@ -18,7 +18,7 @@ if ((isset($_POST['username'])) && (isset($_POST['password'])))
 
 	require("../config.php");
 
-	$stmt = $dbconnect->prepare("SELECT id, password FROM user WHERE username=?");
+	$stmt = $dbconnect->prepare("SELECT id, password FROM sl_user WHERE username=?");
 	$stmt->bind_param("s", $_POST['username']);
 	$stmt->execute();
 

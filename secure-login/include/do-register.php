@@ -6,7 +6,7 @@ if(isset($_POST['username']) && isset($_POST['password']))
 
 	require("../config.php");
 
-	$stmt = $dbconnect->prepare("SELECT id FROM user WHERE username=?");
+	$stmt = $dbconnect->prepare("SELECT id FROM sl_user WHERE username=?");
 	$stmt->bind_param("s", $_POST['username']);
 	$stmt->execute();
 
@@ -32,7 +32,7 @@ if(isset($_POST['username']) && isset($_POST['password']))
 			];
  			$hash = password_hash($_POST['password'], PASSWORD_BCRYPT, $options);
 
-			$stmt = $dbconnect->prepare("INSERT INTO user (username, password, salt) VALUES (?, ?, ?)");
+			$stmt = $dbconnect->prepare("INSERT INTO sl_user (username, password, salt) VALUES (?, ?, ?)");
 			$stmt->bind_param("sss", $_POST['username'], $hash, $salt);
 			$stmt->execute();
 

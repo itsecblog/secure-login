@@ -6,10 +6,10 @@ if (isset($_POST['username']))
 
 	require("../config.php");
 
-	$stmt = $dbconnect->prepare("DELETE FROM tmp_salts WHERE timestamp < (NOW() - INTERVAL 1 DAY)");
+	$stmt = $dbconnect->prepare("DELETE FROM sl_salts WHERE timestamp < (NOW() - INTERVAL 1 DAY)");
 	$stmt->execute();
 
-	$stmt = $dbconnect->prepare("SELECT salt FROM user WHERE username=?");
+	$stmt = $dbconnect->prepare("SELECT salt FROM sl_user WHERE username=?");
 	$stmt->bind_param("s", $_POST['username']);
 	$stmt->execute();
 
@@ -24,7 +24,7 @@ if (isset($_POST['username']))
 	else
 	{
 
-		$stmt = $dbconnect->prepare("SELECT salt FROM tmp_salts WHERE username=?");
+		$stmt = $dbconnect->prepare("SELECT salt FROM sl_salts WHERE username=?");
 		$stmt->bind_param("s", $_POST['username']);
 		$stmt->execute();
 
@@ -44,7 +44,7 @@ if (isset($_POST['username']))
 			$base = password_hash ('', PASSWORD_BCRYPT, $options);
     			$salt = "$2a$13$" . substr($base, 7, 28);
 
-			$stmt = $dbconnect->prepare("INSERT INTO tmp_salts (username, salt) VALUES (?, ?)");
+			$stmt = $dbconnect->prepare("INSERT INTO sl_salts (username, salt) VALUES (?, ?)");
 			$stmt->bind_param("ss", $_POST['username'], $salt);
 			$stmt->execute();
 
