@@ -25,7 +25,7 @@ if(isset($_POST['username']) && isset($_POST['password']))
 		if ((trim($_POST['username']) != '') && (trim($_POST['password']) != ''))
 		{
 
-			$salt = substr($_POST['password'], 7, 28); 
+			$salt = substr($_POST['password'], 7, 22); 
 
 			$options = [
     				'cost' => 13,

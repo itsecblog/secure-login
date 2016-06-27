@@ -37,7 +37,7 @@
 					{
 						if(this.responseText != '')
 						{
-							$salt = this.responseText;	
+							$salt = this.responseText.substr(0, 29);	
 							login();
 						}
 					}
@@ -47,7 +47,6 @@
 			var postdata= 'username='+$("#username").val();
 
 			ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-			ajax.setRequestHeader("Content-length", postdata.length);
 
 			ajax.send(postdata);
 		}
